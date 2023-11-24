@@ -2,6 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Create an .env file in root directory with below variables
+BASE_URL=https://api.rdbranch.com//api/
+USER=username
+PASSWORD=userpassword
+ACCESS_TOKEN=api_token
+MICROSITE_NAME=res_microsite_name
+
 First, run the development server:
 
 ```bash
