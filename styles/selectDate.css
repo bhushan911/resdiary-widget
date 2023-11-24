@@ -1,0 +1,22 @@
+/* SelectDate.css */
+/* .react-datepicker__day--disabled {
+  color: grey !important;
+  pointer-events: none;
+}
+
+.custom-date-picker-input {
+  border-radius: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+}
+
+.date-picker-container {
+  position: relative;
+} */
+
+/* Adjust the z-index to ensure the calendar is above other elements */
+/* .react-datepicker-popper {
+  z-index: 999;
+} */
