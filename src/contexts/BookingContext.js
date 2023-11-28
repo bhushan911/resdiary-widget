@@ -1,11 +1,16 @@
 "use client";
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
+import { useFormik } from "formik";
 import {
   getSetup,
   getAvailabilityForDateRangeV2,
   getAvailabilitySearch,
   checkAvailability,
 } from "../serverMethods/servermethods";
+import * as Yup from "yup";
+import "react-phone-number-input/style.css";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { NavigationContext } from "./NavigationContext";
 
 export const BookingContext = createContext();
 
@@ -24,15 +29,9 @@ export const BookingProvider = ({
   const [newAvailabilityForDateRangeV2, setNewAvailabilityForDateRangeV2] =
     useState(availabilityForDateRangeV2);
   const [selectedPromotion, setSelectedPromotion] = useState(null);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobileNumber: "",
-    voucherCode: "",
-    comments: "",
-    receiveEmailMarketingsubscribe: false,
-  });
+  const [bookingResult, setBookingResult] = useState(null); // New state to store booking result
+
+  const { nextStep } = useContext(NavigationContext);
 
   const [availability, setAvailability] = useState("");
 
@@ -98,6 +97,51 @@ export const BookingProvider = ({
       setAvailability(availability);
     }
   };
+
+  // Define the validation schema using Yup
+  const validationSchema = Yup.object({
+    firstName: Yup.string()
+      .required("First Name is required")
+      .max(20, "First Name cannot be more than 20 characters"),
+    lastName: Yup.string()
+      .required("Last Name is required")
+      .max(20, "Last Name cannot be more than 20 characters"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    phone: Yup.string()
+      .required("Phone number is required")
+      .test("is-valid-phone", "Phone number is invalid", (value) => {
+        const phoneNumber = parsePhoneNumberFromString(value);
+        return phoneNumber?.isValid();
+      }),
+    voucherCode: Yup.string(),
+    comments: Yup.string(),
+    receiveEmailMarketingsubscribe: Yup.boolean(),
+  });
+
+  // Set up Formik
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      mobileNumber: "",
+      mobileCountryCode: "",
+      voucherCode: "",
+      comments: "",
+      receiveEmailMarketingsubscribe: false,
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      updateFormValues(values);
+      nextStep(); // Only proceed to the next step if form is valid
+    },
+  });
+
+  // Function to update form values from child components
+  const updateFormValues = (newValues) => {
+    formik.setValues({ ...formik.values, ...newValues });
+  };
   return (
     <BookingContext.Provider
       value={{
@@ -120,8 +164,11 @@ export const BookingProvider = ({
         availability,
         selectedPromotion,
         setSelectedPromotion,
-        formData,
-        setFormData,
+        ...formik,
+        updateFormValues,
+        validationSchema,
+        bookingResult,
+        setBookingResult,
       }}
     >
       {children}

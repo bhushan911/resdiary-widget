@@ -1,4 +1,38 @@
 "use server";
+let currentToken = null;
+async function fetchToken() {
+  const username = process.env.USER;
+  const password = process.env.PASSWORD;
+  const base_url = process.env.BASE_URL;
+  const url = `${base_url}Jwt/v2/Authenticate`;
+
+  try {
+    const result = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      //cache: "no-store",
+      method: "POST",
+
+      body: JSON.stringify({
+        Username: `${username}`,
+        Password: `${password}`,
+      }),
+    });
+
+    console.log(url);
+
+    const data = await result.json();
+    currentToken = data.Token;
+
+    Response.json({ message: "Success", data: currentToken });
+    console.log(data);
+    return data;
+  } catch (error) {
+    return Response.json(`Error is : ${error}`);
+  }
+}
 
 async function getAvailabilitySearch(partySize, selectedDate) {
   const microSiteName = process.env.MICROSITE_NAME;
@@ -9,7 +43,7 @@ async function getAvailabilitySearch(partySize, selectedDate) {
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
 
@@ -44,7 +78,7 @@ async function getSetup(selectedDate) {
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
       //cache: "no-store",
@@ -74,7 +108,7 @@ async function getAvailabilityForDateRangeV2(selectedDate, selectedPartySize) {
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
       //cache: "no-store",
@@ -256,7 +290,7 @@ const getRestaurantNames = async () => {
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
       //cache: "no-store",
@@ -279,7 +313,7 @@ const getRestaurantInfo = async (microSiteName) => {
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
       //cache: "no-store",
@@ -311,7 +345,7 @@ const SearchAvailabilityByDistance = async (
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
       //cache: "no-store",
@@ -319,29 +353,38 @@ const SearchAvailabilityByDistance = async (
     });
 
     data = await result.json();
-
+    console.log(data);
     return data;
   } catch (error) {
     return console.log(`Error is : ${error}`);
   }
 };
 
-async function BookingWithStripeToken(
-  partySize,
-  selectedDate,
-  selectedTime,
-  selectedPromotion,
-  formData
-) {
+async function BookingWithStripeToken(bookingDetails) {
+  const {
+    partySize,
+    selectedDate,
+    selectedTime,
+    selectedPromotionId,
+    comments,
+    firstName,
+    lastName,
+    mobileCountryCode,
+    mobileNumber,
+    email,
+    receiveEmailMarketingsubscribe,
+  } = bookingDetails;
+
   const microSiteName = process.env.MICROSITE_NAME;
   const base_url = process.env.BASE_URL;
 
   const url = `${base_url}ConsumerApi/v1/Restaurant/${microSiteName}/BookingWithStripeToken/`;
+  console.log(url);
 
   try {
     const result = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
 
@@ -349,29 +392,26 @@ async function BookingWithStripeToken(
       method: "POST",
 
       body: JSON.stringify({
-        VisitDate: selectedDate.toISOString(),
+        VisitDate: selectedDate,
         VisitTime: selectedTime,
         PartySize: partySize,
         ChannelCode: "ONLINE",
-        PromotionId: selectedPromotion.Id,
-        SpecialRequests: formData.comments,
+        PromotionId: selectedPromotionId,
+        SpecialRequests: comments,
         IsLeaveTimeConfirmed: true,
         Customer: {
-          FirstName: formData.firstName,
-          Surname: formData.lastName,
-          MobileCountryCode: 44,
-          Mobile: formData.mobileNumber,
-          Email: formData.email,
-          ReceiveResDiaryEmailMarketing:
-            formData.receiveEmailMarketingsubscribe,
-          ReceiveEmailMarketing: formData.receiveEmailMarketingsubscribe,
+          FirstName: firstName,
+          Surname: lastName,
+          MobileCountryCode: mobileCountryCode,
+          Mobile: mobileNumber,
+          Email: email,
+          ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
+          ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
           // ResDiaryEmailMarketingOptInText: "I would like to receive emails",
           // ReceiveRestaurantEmailMarketing: true,
         },
       }),
     });
-
-    console.log(url);
 
     const data = await result.json();
 
@@ -382,6 +422,14 @@ async function BookingWithStripeToken(
     return Response.json(`Error is : ${error}`);
   }
 }
+
+await fetchToken();
+
+// Set an interval to refresh the token every 60 seconds
+
+setInterval(async () => {
+  await fetchToken();
+}, 12 * 60 * 60 * 1000);
 
 export {
   getAvailabilitySearch,

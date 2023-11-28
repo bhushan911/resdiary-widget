@@ -32,22 +32,22 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <BookingProvider
-          setup={setup}
-          availabilitySearch={availabilitySearch}
-          availabilityForDateRangeV2={availabilityForDateRangeV2}
-        >
-          {/* <div className="flex flex-col items-center justify-center min-h-full px-4 py-6 overflow-hidden bg-white rounded-md shadow-lg max-w-lg mx-auto my-10 sm:min-h-screen">
+        <NavigationProvider>
+          <BookingProvider
+            setup={setup}
+            availabilitySearch={availabilitySearch}
+            availabilityForDateRangeV2={availabilityForDateRangeV2}
+          >
+            {/* <div className="flex flex-col items-center justify-center min-h-full px-4 py-6 overflow-hidden bg-white rounded-md shadow-lg max-w-lg mx-auto my-10 sm:min-h-screen">
             <div className="w-full max-w-3xl px-4 py-5 sm:p-6 lg:px-8"> */}
-          <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-            <div className="bg-white rounded-lg shadow-xl overflow-hidden max-w-screen-md w-full mx-4 md:mx-0 my-10">
-              <ReviewComponent />
-              <div className="p-4 space-y-4">
-                <NavigationProvider>{children}</NavigationProvider>
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-screen-md w-full mx-2 md:mx-0 my-10">
+                <ReviewComponent />
+                <div className="p-4 space-y-4">{children}</div>
               </div>
             </div>
-          </div>
-        </BookingProvider>
+          </BookingProvider>
+        </NavigationProvider>
       </body>
     </html>
   );
