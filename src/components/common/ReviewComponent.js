@@ -7,22 +7,22 @@ function ReviewComponent() {
   const date = selectedDate.toISOString().split("T")[0];
 
   return (
-    // <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">
-    <div className="bg-white  rounded  px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
-        <div className="flex-1 mb-4 md:mb-0">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">DRG</h1>
-        </div>
-        <div className="flex items-center text-sm">
-          <span className="font-semibold text-gray-700 text-lg">{date}</span>
-          <span className="mx-2 text-gray-700 font-bold text-lg">|</span>
-          <span className="font-semibold text-gray-700 text-lg">
-            {partySize}
-          </span>
-          <span className="mx-2 text-gray-700 font-bold text-lg">|</span>
-          <span className="font-semibold text-gray-700 text-lg">
-            {selectedTime}
-          </span>
+    <div>
+      <div className="flex flex-col md:flex-row justify-between  mb-2 ">
+        <div className="flex flex-row w-full text-gray-900 font-bold">
+          {/* Ensure each child flex item has flex-1 to divide space equally */}
+          {/* <div className="flex-1 border-black border-2 font-bold "> */}
+          <div className="flex-1  font-bold ">
+            <h1 className="text-3xl text-center my-2">DRG</h1>
+          </div>
+          {/* <div className="flex-1 border-black border-2 flex items-center justify-center"> */}
+          <div className="flex-1  flex items-center justify-center">
+            <span className="text-lg">{date}</span>
+            <span className="mx-2 text-lg">|</span>
+            <span className="text-lg">{partySize}</span>
+            <span className="mx-2 text-lg">|</span>
+            <span className="text-lg">{selectedTime}</span>
+          </div>
         </div>
       </div>
     </div>

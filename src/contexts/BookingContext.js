@@ -22,7 +22,7 @@ export const BookingProvider = ({
 }) => {
   const [partySize, setPartySize] = useState(setup.OnlinePartySizeDefault);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("No Time Selected");
+  const [selectedTime, setSelectedTime] = useState("");
   const [newSetup, setNewSetup] = useState(setup);
   const [newAvailabilitySearch, setNewAvailabilitySearch] =
     useState(availabilitySearch);
@@ -30,9 +30,7 @@ export const BookingProvider = ({
     useState(availabilityForDateRangeV2);
   const [selectedPromotion, setSelectedPromotion] = useState(null);
   const [bookingResult, setBookingResult] = useState(null); // New state to store booking result
-
   const { nextStep } = useContext(NavigationContext);
-
   const [availability, setAvailability] = useState("");
 
   const updatePartySize = async (newSize) => {
@@ -54,8 +52,6 @@ export const BookingProvider = ({
 
     setNewAvailabilityForDateRangeV2(newAvailabilityForDateRangeV2);
     setNewAvailabilitySearch(newAvailabilitySearch);
-    console.log(newAvailabilityForDateRangeV2);
-    console.log(newAvailabilitySearch);
   };
 
   const updateDate = async (date) => {
@@ -86,16 +82,15 @@ export const BookingProvider = ({
     const selectedDateTime = `${
       selectedDate.toISOString().split("T")[0]
     }T${selectedTime}.0000000`;
-    if (selectedTime === "No Time Selected") {
-      return setAvailability("Please select a time");
-    } else {
-      const availability = await checkAvailability(
-        partySize,
-        selectedDate.toISOString().split("T")[0],
-        selectedDateTime
-      );
-      setAvailability(availability);
-    }
+
+    const availability = await checkAvailability(
+      partySize,
+      selectedDate.toISOString().split("T")[0],
+      selectedDateTime
+    );
+    setAvailability(availability);
+
+    console.log(availability);
   };
 
   // Define the validation schema using Yup

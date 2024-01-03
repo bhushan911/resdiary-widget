@@ -5,7 +5,8 @@ import ContactForm from "../ui/ContactForm";
 import Promotions from "../ui/Promotions";
 import ReviewDetails from "../ui/ReviewDetails";
 import { NavigationContext } from "../../contexts/NavigationContext";
-import CompleteBooking from "../ui/CompleteBooking";
+import TermsAndConditions from "../ui/TermsAndConditions";
+import PrivacyPolicy from "../ui/PrivacyPolicy";
 
 export default function MainComponent() {
   const { currentStep } = useContext(NavigationContext);
@@ -21,7 +22,9 @@ export default function MainComponent() {
       case 4:
         return <ReviewDetails />;
       case 5:
-        return <CompleteBooking />;
+        return <TermsAndConditions />;
+      case 6:
+        return <PrivacyPolicy />;
       default:
         return null;
     }

@@ -1,5 +1,9 @@
 "use server";
+const fs = require("fs");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 let currentToken = null;
+let refreshTimeout = null; // To keep track of the timeout
+
 async function fetchToken() {
   const username = process.env.USER;
   const password = process.env.PASSWORD;
@@ -11,27 +15,54 @@ async function fetchToken() {
       headers: {
         "Content-Type": "application/json",
       },
-
-      //cache: "no-store",
+      cache: "no-store",
       method: "POST",
-
       body: JSON.stringify({
         Username: `${username}`,
         Password: `${password}`,
       }),
     });
 
-    console.log(url);
-
     const data = await result.json();
-    currentToken = data.Token;
-
-    Response.json({ message: "Success", data: currentToken });
-    console.log(data);
+    if (data.Status === "Success") {
+      currentToken = data.Token;
+      scheduleTokenRefresh(data.TokenExpiryUtc);
+      logToFile(`Token fetched successfully: ${JSON.stringify(data)}\n`);
+    } else {
+      logToFile(`Failed to fetch token: ${JSON.stringify(data)}\n`);
+    }
     return data;
   } catch (error) {
-    return Response.json(`Error is : ${error}`);
+    logToFile(`Error fetching token: ${error}\n`);
+    throw new Error(error);
   }
+}
+
+function scheduleTokenRefresh(expiryUtc) {
+  if (refreshTimeout) clearTimeout(refreshTimeout);
+
+  const expiryTime = new Date(expiryUtc).getTime();
+  const currentTime = new Date().getTime();
+  const delay = expiryTime - currentTime;
+
+  if (delay > 0) {
+    refreshTimeout = setTimeout(() => {
+      fetchToken();
+    }, delay);
+    logToFile(`Token will refresh in ${delay / 1000} seconds\n`);
+  } else {
+    logToFile(
+      "Token expired or invalid expiry time. Refreshing immediately.\n"
+    );
+    fetchToken();
+  }
+}
+
+function logToFile(message) {
+  const dateTime = new Date().toISOString();
+  fs.appendFile("log-file.log", `${dateTime} - ${message}`, (err) => {
+    if (err) throw err;
+  });
 }
 
 async function getAvailabilitySearch(partySize, selectedDate) {
@@ -47,7 +78,7 @@ async function getAvailabilitySearch(partySize, selectedDate) {
         "Content-Type": "application/json",
       },
 
-      //cache: "no-store",
+      cache: "no-store",
       method: "POST",
 
       body: JSON.stringify({
@@ -62,7 +93,6 @@ async function getAvailabilitySearch(partySize, selectedDate) {
     const data = await result.json();
 
     Response.json({ message: "Success", data: data });
-    console.log(data);
     return data;
   } catch (error) {
     return Response.json(`Error is : ${error}`);
@@ -81,14 +111,14 @@ async function getSetup(selectedDate) {
         Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
-      //cache: "no-store",
+      cache: "no-store",
       method: "GET",
     });
 
     console.log(url);
 
     const data = await result.json();
-    console.log(data.OnlinePartySizeDefault);
+    // console.log(data.OnlinePartySizeDefault);
     // Response.json({ message: "Success", data: data });
     return data;
   } catch (error) {
@@ -99,7 +129,7 @@ async function getSetup(selectedDate) {
 async function getAvailabilityForDateRangeV2(selectedDate, selectedPartySize) {
   const endDate = new Date(selectedDate);
   endDate.setDate(endDate.getDate() + 120);
-  console.log(endDate);
+  // console.log(endDate);
   const microSiteName = process.env.MICROSITE_NAME;
   const base_url = process.env.BASE_URL;
 
@@ -111,14 +141,13 @@ async function getAvailabilityForDateRangeV2(selectedDate, selectedPartySize) {
         Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
-      //cache: "no-store",
+      cache: "no-store",
       method: "POST",
       body: JSON.stringify({
         DateFrom: selectedDate,
         DateTo: endDate,
         PartySize: selectedPartySize,
         ChannelCode: "ONLINE",
-        // PromotionId: null,
         AvailabilityType: "Reservation",
       }),
     });
@@ -139,9 +168,12 @@ const checkAvailability = async (
 ) => {
   const microSiteName = process.env.MICROSITE_NAME;
   let availabilityResult = {
+    accessedName: microSiteName,
     result: false,
+    matchingTimeSlot: null,
     restaurants: [],
-    message: "Hello World",
+    message: "Success",
+    restaurantDetails: [],
   };
   try {
     const response = await getAvailabilitySearch(
@@ -157,38 +189,30 @@ const checkAvailability = async (
       // console.log(`Formatted Time: ${formattedDateTime}`);
       return (
         slotDate.toISOString().split("T")[0] ===
-          // selectedDateTime.toISOString().split("T")[0] &&
           formattedDateTime.toISOString().split("T")[0] &&
         slotDate.getHours() === formattedDateTime.getHours() &&
-        slotDate.getMinutes() === formattedDateTime.getMinutes() &&
-        slot.HasStandardAvailability
+        slotDate.getMinutes() === formattedDateTime.getMinutes()
       );
     });
+    console.log("Matching Time Slot");
     console.log(matchingTimeSlot);
     if (matchingTimeSlot) {
       console.log(
         "Success! Standard availability found for the selected date and time."
       );
       availabilityResult.result = true;
+      availabilityResult.matchingTimeSlot = matchingTimeSlot;
       availabilityResult.message =
         "Success! Standard availability found for the selected date and time.";
       return availabilityResult;
     } else {
-      // const responseData = await getRestaurantNames();
-      // responseData.forEach(async (restaurant) => {
-      //   console.log(restaurant);
-      //   const responseData = await getRestaurantInfo(restaurant);
-
-      //   console.log(responseData);
-      // });
-
       console.log(
         `Microsite Name: ${microSiteName} does not have availability at ${selectedDateTime}.`
       );
       availabilityResult.message = `Microsite Name: ${microSiteName} does not have availability at ${selectedDateTime}.`;
 
       const responseData = await getRestaurantInfo(microSiteName);
-      console.log(responseData);
+      // console.log(responseData);
       const latitude = responseData.Address.Latitude;
       const longitude = responseData.Address.Longitude;
       const selectedTime = selectedDateTime.split("T")[1].split(".")[0];
@@ -210,76 +234,35 @@ const checkAvailability = async (
         const fullAddress = restaurant.FullAddress;
         console.log(`Name: ${name}, Full Address: ${fullAddress}`);
       });
+      let restaurantDetails = [];
+      for (const restaurant of suggestions.Data) {
+        const name = restaurant.AccessedName;
+        try {
+          const response = await getRestaurantInfo(name);
+          restaurantDetails.push(response);
+        } catch (error) {
+          console.error(`Error fetching details for ${name}:`, error);
+        }
+      }
+
+      // console.log("restaurantDetails", restaurantDetails);
 
       if (suggestions.Data.length > 0) {
         availabilityResult.result = false;
         availabilityResult.message =
           "No Availability for the selected date and time. Please see the following suggestions at the DRG restaurants.";
         availabilityResult.restaurants = suggestions.Data;
+        availabilityResult.restaurantDetails = restaurantDetails;
       } else {
         availabilityResult.result = false;
         availabilityResult.message =
           "No Availability for the selected date and time. No suggestions available.";
       }
-      // return console.log("No standard availability found");
       return availabilityResult;
     }
   } catch (error) {
     console.log(`Error is : ${error}`);
   }
-
-  // const matchingTimeSlot = response.TimeSlots.find((slot) => {
-  //   const slotDate = new Date(slot.TimeSlot);
-  //   return (
-  //     slotDate.toISOString().split("T")[0] ===
-  //       // selectedDateTime.toISOString().split("T")[0] &&
-  //       selectedDateTime.toISOString()[0] &&
-  //     slotDate.getHours() === selectedTimeSlot.getHours() &&
-  //     slotDate.getMinutes() === selectedTimeSlot.getMinutes() &&
-  //     slot.HasStandardAvailability
-  //   );
-  // });
-
-  // if (matchingTimeSlot) {
-  //   return "Success! Standard availability found for the selected date and time.";
-  // } else {
-  //   const suggestions = {
-  //     "Restaurant A": true, // Available (true) on the selected date and time
-  //     "Restaurant B": false, // Not available (false) on the selected date and time
-  //     "Restaurant C": true, // Available (true) on the selected date and time
-  //     // Add more restaurants as needed
-  //   };
-  //   response.TimeSlots.forEach((slot) => {
-  //     const slotDate = new Date(slot.TimeSlot);
-  //     const key = `${slotDate.getHours()}:${slotDate.getMinutes()}`;
-  //     if (!slot.HasStandardAvailability) {
-  //       if (!suggestions[key]) {
-  //         suggestions[key] = [];
-  //       }
-  //       suggestions[key].push(slot.ServiceId); // Store restaurant IDs for suggestions
-  //     }
-  //   });
-
-  //   const suggestionList = await Promise.all(
-  //     Object.entries(suggestions).map(async ([time, restaurants]) => {
-  //       const formattedTime = time.split(":").map(Number).join(":");
-  //       const restaurantNames = await Promise.all(
-  //         restaurants.map(async (restaurantId) => {
-  //           // Assuming getRestaurantName is an asynchronous function to fetch restaurant names
-  //           const restaurantName = await getRestaurantName(restaurantId);
-  //           return `Restaurant ${restaurantName}`;
-  //         })
-  //       );
-  //       return `${formattedTime}: ${restaurantNames.join(", ")}`;
-  //     })
-  //   );
-
-  //   return suggestionList.length
-  //     ? `No standard availability found. Here are some suggestions:\n${suggestionList.join(
-  //         "\n"
-  //       )}`
-  //     : "No standard availability found and no suggestions available.";
-  // }
 };
 
 const getRestaurantNames = async () => {
@@ -293,7 +276,7 @@ const getRestaurantNames = async () => {
         Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
-      //cache: "no-store",
+      cache: "no-store",
       method: "GET",
     });
 
@@ -340,20 +323,51 @@ const SearchAvailabilityByDistance = async (
 
   console.log(`Date: ${date} Time: ${time} Party Size: ${selectedPartySize}`);
 
-  const url = `${base_url}ConsumerApi/v1/Restaurant/SearchAvailabilityByDistance?lat=${latitude}&lon=${longitude}&visitDate=${date}&visitTime=${time}&covers=${selectedPartySize}&page=1&pageSize=5&radius=1000`;
-  var data;
+  const url = `${base_url}ConsumerApi/v1/Restaurant/SearchAvailabilityByDistance?lat=${latitude}&lon=${longitude}&visitDate=${date}&visitTime=${time}&covers=${selectedPartySize}&page=1&pageSize=5&radius=1000&&visitTimeWindow=240`;
   try {
     const result = await fetch(url, {
       headers: {
         Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
-      //cache: "no-store",
+      cache: "no-store",
       method: "GET",
     });
 
-    data = await result.json();
-    console.log(data);
+    const data = await result.json();
+
+    return data;
+  } catch (error) {
+    return console.log(`Error is : ${error}`);
+  }
+};
+
+const SearchByAvailablity = async (
+  // microSiteName,
+  latitude,
+  longitude,
+  date,
+  time,
+  selectedPartySize
+) => {
+  const base_url = process.env.BASE_URL;
+
+  console.log(`Date: ${date} Time: ${time} Party Size: ${selectedPartySize}`);
+
+  const url = `${base_url}ConsumerApi/v1/Restaurant/SearchAvailability?lat=${latitude}&lon=${longitude}&visitDate=${date}&visitTime=${time}&covers=${selectedPartySize}&page=1&pageSize=5&radius=1000&visitTimeWindow=300`;
+  try {
+    const result = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${currentToken}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      method: "GET",
+    });
+
+    const data = await result.json();
+    console.log(url);
+
     return data;
   } catch (error) {
     return console.log(`Error is : ${error}`);
@@ -366,6 +380,7 @@ async function BookingWithStripeToken(bookingDetails) {
     selectedDate,
     selectedTime,
     selectedPromotionId,
+    leaveTimeConfirmed,
     comments,
     firstName,
     lastName,
@@ -388,7 +403,7 @@ async function BookingWithStripeToken(bookingDetails) {
         "Content-Type": "application/json",
       },
 
-      //cache: "no-store",
+      cache: "no-store",
       method: "POST",
 
       body: JSON.stringify({
@@ -398,7 +413,7 @@ async function BookingWithStripeToken(bookingDetails) {
         ChannelCode: "ONLINE",
         PromotionId: selectedPromotionId,
         SpecialRequests: comments,
-        IsLeaveTimeConfirmed: true,
+        IsLeaveTimeConfirmed: leaveTimeConfirmed,
         Customer: {
           FirstName: firstName,
           Surname: lastName,
@@ -407,29 +422,103 @@ async function BookingWithStripeToken(bookingDetails) {
           Email: email,
           ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
           ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
-          // ResDiaryEmailMarketingOptInText: "I would like to receive emails",
-          // ReceiveRestaurantEmailMarketing: true,
         },
+        StripeCheckoutSuccessUrl: `${process.env.YOUR_DOMAIN}/booking-status`,
+        StripeCheckoutCancelUrl: `${process.env.YOUR_DOMAIN}/booking-status`,
       }),
     });
 
     const data = await result.json();
-
-    Response.json({ message: "Success", data: data });
     console.log(data);
-    return data;
+    if (data.Status === "Success") {
+      return {
+        bookingResult: data,
+        sessionURL: null,
+      };
+    } else if (
+      data.Status === "PaymentRequired" ||
+      data.Status === "CreditCardRequired"
+    ) {
+      const session = await stripe.checkout.sessions.retrieve(
+        data.StripeCheckoutSessionId
+      );
+      // console.log("session : ", session);
+
+      return {
+        bookingResult: data,
+        sessionURL: session.url,
+      };
+    } else {
+      return { bookingResult: data };
+    }
   } catch (error) {
-    return Response.json(`Error is : ${error}`);
+    return { bookingResult: { status: "Failed", message: error.message } };
+  }
+}
+async function BookingWithStripeTokenwithSession(bookingDetails) {
+  const {
+    partySize,
+    selectedDate,
+    selectedTime,
+    selectedPromotionId,
+    leaveTimeConfirmed,
+    comments,
+    firstName,
+    lastName,
+    mobileCountryCode,
+    mobileNumber,
+    email,
+    receiveEmailMarketingsubscribe,
+    StripeCheckoutSessionId, // Added sessionId in the destructuring
+  } = bookingDetails;
+
+  const microSiteName = process.env.MICROSITE_NAME;
+  const base_url = process.env.BASE_URL;
+
+  const url = `${base_url}ConsumerApi/v1/Restaurant/${microSiteName}/BookingWithStripeToken/`;
+  console.log(url);
+  try {
+    const result = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${currentToken}`,
+        "Content-Type": "application/json",
+      },
+
+      cache: "no-store",
+      method: "POST",
+
+      body: JSON.stringify({
+        VisitDate: selectedDate,
+        VisitTime: selectedTime,
+        PartySize: partySize,
+        ChannelCode: "ONLINE",
+        PromotionId: selectedPromotionId,
+        SpecialRequests: comments,
+        IsLeaveTimeConfirmed: leaveTimeConfirmed,
+        Customer: {
+          FirstName: firstName,
+          Surname: lastName,
+          MobileCountryCode: mobileCountryCode,
+          Mobile: mobileNumber,
+          Email: email,
+          ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
+          ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
+        },
+        StripeCheckoutSessionId: StripeCheckoutSessionId, // Include the sessionId if available
+      }),
+    });
+
+    const data = await result.json();
+    console.log(data);
+    return {
+      bookingResult: data,
+    };
+  } catch (error) {
+    return { bookingResult: { status: "Failed", message: error.message } };
   }
 }
 
 await fetchToken();
-
-// Set an interval to refresh the token every 60 seconds
-
-setInterval(async () => {
-  await fetchToken();
-}, 12 * 60 * 60 * 1000);
 
 export {
   getAvailabilitySearch,
@@ -439,5 +528,7 @@ export {
   getRestaurantNames,
   getRestaurantInfo,
   SearchAvailabilityByDistance,
+  SearchByAvailablity,
   BookingWithStripeToken,
+  BookingWithStripeTokenwithSession,
 };

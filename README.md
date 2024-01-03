@@ -10,6 +10,10 @@ USER=username
 PASSWORD=userpassword
 ACCESS_TOKEN=api_token
 MICROSITE_NAME=res_microsite_name
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_
+STRIPE_SECRET_KEY=sk_test_
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+YOUR_DOMAIN=http://localhost:3000
 ```
 
 First, run the development server:

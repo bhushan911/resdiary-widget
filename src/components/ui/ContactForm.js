@@ -133,7 +133,7 @@ const ContactForm = () => {
         <div className="flex justify-between items-center mt-4">
           <button
             type="button"
-            onClick={prevStep}
+            onClick={() => prevStep()}
             className="text-indigo-600 hover:text-indigo-800 transition duration-300"
           >
             Previous
