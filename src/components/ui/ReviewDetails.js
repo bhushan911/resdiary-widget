@@ -29,28 +29,6 @@ const ReviewDetails = () => {
   };
   console.log(values);
 
-  // const handleBookingSubmission = async () => {
-  //   // Prepare booking details
-  //   const bookingDetails = {
-  //     partySize,
-  //     selectedDate: selectedDate.toISOString(),
-  //     selectedTime,
-  //     selectedPromotionId: selectedPromotion?.Id, // Using optional chaining in case selectedPromotion is undefined
-  //     ...values,
-  //   };
-
-  //   try {
-  //     const bookingResponse = await BookingWithStripeToken(bookingDetails);
-  //     setBookingResult(bookingResponse); // Store booking result in state
-  //   } catch (error) {
-  //     console.error("Booking failed:", error);
-  //     setBookingResult({
-  //       status: "Failed",
-  //       message: "Booking could not be completed.",
-  //     }); // Handle error case
-  //   }
-  // };
-
   const handleBookingSubmission = async () => {
     // Prepare booking details
     const booking = {

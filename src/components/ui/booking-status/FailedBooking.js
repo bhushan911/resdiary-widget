@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { NavigationContext } from "../../contexts/NavigationContext";
+import { NavigationContext } from "../../../contexts/NavigationContext";
 
 const FailedBooking = ({ booking }) => {
   const router = useRouter();
