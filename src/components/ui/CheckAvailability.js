@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { format } from "date-fns";
 import { BookingContext } from "../../contexts/BookingContext";
 import { NavigationContext } from "../../contexts/NavigationContext";
+import Image from "next/image";
 
 function CheckAvailability() {
   const [buttonValue, setButtonValue] = useState("Check Availability");
@@ -104,7 +105,7 @@ function CheckAvailability() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img
+                    <Image
                       src={restaurantDetail.MainImage.Url}
                       alt={restaurant.Name}
                       className="w-64 h-40 items-center border-2 border-gray-600 justify-center rounded-md mt-2"

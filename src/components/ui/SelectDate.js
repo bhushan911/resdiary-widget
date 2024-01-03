@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../../../styles/SelectDate.css";
+import "../../../styles/selectDate.css";
 import { BookingContext } from "../../contexts/BookingContext";
 
 function SelectDate() {
