@@ -58,14 +58,6 @@ export default function TimeSlots() {
     }
     return "No Availability"; // Return "No Availability" if no timeslots are found
   };
-  // useEffect(() => {
-  //   if (isMounted && services.length > 0) {
-  //     const firstServiceTimeslots = generateTimeslots(services[0]);
-  //     if (firstServiceTimeslots.length > 0) {
-  //       setSelectedTime(firstServiceTimeslots[0]); // Set the default selected time
-  //     }
-  //   }
-  // }, [services, setSelectedTime, isMounted]);
 
   useEffect(() => {
     if (isMounted) {

@@ -15,7 +15,6 @@
 .date-picker-container {
   position: relative;
 } */
-
 /* Adjust the z-index to ensure the calendar is above other elements */
 /* .react-datepicker-popper {
   z-index: 999;

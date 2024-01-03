@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import SuccessfulBooking from "@/src/components/ui/SuccessfulBooking";
-import FailedBooking from "@/src/components/ui/FailedBooking";
+import SuccessfulBooking from "@/src/components/ui/booking-status/SuccessfulBooking";
+import FailedBooking from "@/src/components/ui/booking-status/FailedBooking";
 import { BookingWithStripeTokenwithSession } from "@/src/serverMethods/servermethods";
 import Loading from "@/src/components/ui/Loading";
 

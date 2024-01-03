@@ -8,7 +8,6 @@ import { BookingContext } from "@/src/contexts/BookingContext";
 
 const ContactForm = () => {
   const { nextStep, prevStep } = useContext(NavigationContext);
-  // const { updateFormValues } = useContext(BookingContext);
   const {
     values,
     handleChange,
@@ -141,7 +140,6 @@ const ContactForm = () => {
           <button
             type="submit"
             className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition duration-300"
-            //disabled={!isValid}
           >
             Next
           </button>

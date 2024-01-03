@@ -31,21 +31,13 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* {children} */}
         <NavigationProvider>
           <BookingProvider
             setup={setup}
             availabilitySearch={availabilitySearch}
             availabilityForDateRangeV2={availabilityForDateRangeV2}
           >
-            {/* <div className=" flex flex-col border-2 border-black  items-center justify-center ">
-              <div className="bg-white rounded-lg border-2 border-black shadow-lg overflow-hidden max-w-screen-md w-full mx-2 md:mx-0 my-10">
-                <div className="border-b-2 border-black ">
-                  <ReviewComponent />
-                </div> */}
             <div className="p-4 space-y-4 ">{children}</div>
-            {/* </div>
-            </div> */}
           </BookingProvider>
         </NavigationProvider>
       </body>
