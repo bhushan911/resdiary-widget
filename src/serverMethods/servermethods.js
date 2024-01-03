@@ -421,8 +421,8 @@ async function BookingWithStripeToken(bookingDetails) {
           ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
           ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
         },
-        StripeCheckoutSuccessUrl: `${process.env.YOUR_DOMAIN}/booking-status`,
-        StripeCheckoutCancelUrl: `${process.env.YOUR_DOMAIN}/booking-status`,
+        StripeCheckoutSuccessUrl: `${process.env.DOMAIN_NAME}/booking-status`,
+        StripeCheckoutCancelUrl: `${process.env.DOMAIN_NAME}/booking-status`,
       }),
     });
 

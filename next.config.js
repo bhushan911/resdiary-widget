@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ["diary-branch.azureedge.net"], // Add other domains as needed
+  },
   async headers() {
     return [
       {

@@ -106,9 +106,11 @@ function CheckAvailability() {
                     rel="noopener noreferrer"
                   >
                     <Image
-                      src={restaurantDetail.MainImage.Url}
+                      src={`${restaurantDetail.MainImage.Url}`}
                       alt={restaurant.Name}
                       className="w-64 h-40 items-center border-2 border-gray-600 justify-center rounded-md mt-2"
+                      width={500}
+                      height={500}
                     />
                   </a>
                 )}
