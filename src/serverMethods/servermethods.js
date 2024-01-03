@@ -1,5 +1,5 @@
 "use server";
-const fs = require("fs");
+// const fs = require("fs");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 let currentToken = null;
 let refreshTimeout = null; // To keep track of the timeout
@@ -27,13 +27,13 @@ async function fetchToken() {
     if (data.Status === "Success") {
       currentToken = data.Token;
       scheduleTokenRefresh(data.TokenExpiryUtc);
-      logToFile(`Token fetched successfully: ${JSON.stringify(data)}\n`);
+      // logToFile(`Token fetched successfully: ${JSON.stringify(data)}\n`);
     } else {
-      logToFile(`Failed to fetch token: ${JSON.stringify(data)}\n`);
+      // logToFile(`Failed to fetch token: ${JSON.stringify(data)}\n`);
     }
     return data;
   } catch (error) {
-    logToFile(`Error fetching token: ${error}\n`);
+    // logToFile(`Error fetching token: ${error}\n`);
     throw new Error(error);
   }
 }
@@ -49,21 +49,19 @@ function scheduleTokenRefresh(expiryUtc) {
     refreshTimeout = setTimeout(() => {
       fetchToken();
     }, delay);
-    logToFile(`Token will refresh in ${delay / 1000} seconds\n`);
+    // logToFile(`Token will refresh in ${delay / 1000} seconds\n`);
   } else {
-    logToFile(
-      "Token expired or invalid expiry time. Refreshing immediately.\n"
-    );
+    // logToFile("Token expired or invalid expiry time. Refreshing immediately.\n");
     fetchToken();
   }
 }
 
-function logToFile(message) {
-  const dateTime = new Date().toISOString();
-  fs.appendFile("log-file.log", `${dateTime} - ${message}`, (err) => {
-    if (err) throw err;
-  });
-}
+// function logToFile(message) {
+//   const dateTime = new Date().toISOString();
+//   fs.appendFile("log-file.log", `${dateTime} - ${message}`, (err) => {
+//     if (err) throw err;
+//   });
+// }
 
 async function getAvailabilitySearch(partySize, selectedDate) {
   const microSiteName = process.env.MICROSITE_NAME;
