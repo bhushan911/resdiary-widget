@@ -207,7 +207,7 @@ const checkAvailability = async (
       console.log(
         `Microsite Name: ${microSiteName} does not have availability at ${selectedDateTime}.`
       );
-      availabilityResult.message = `Microsite Name: ${microSiteName} does not have availability at ${selectedDateTime}.`;
+      availabilityResult.message = `Restaurant Name: ${microSiteName} does not have availability at ${selectedDateTime}.`;
 
       const responseData = await getRestaurantInfo(microSiteName);
       // console.log(responseData);
@@ -226,7 +226,7 @@ const checkAvailability = async (
         selectedTime,
         selectedPartySize
       );
-
+      // if (suggestions.Data && suggestions.Data.length > 0) {
       suggestions.Data.forEach((restaurant) => {
         const name = restaurant.Name;
         const fullAddress = restaurant.FullAddress;
@@ -242,10 +242,15 @@ const checkAvailability = async (
           console.error(`Error fetching details for ${name}:`, error);
         }
       }
+      // }
 
+      console.log("suggestions", suggestions);
       // console.log("restaurantDetails", restaurantDetails);
 
-      if (suggestions.Data.length > 0) {
+      if (suggestions.Message) {
+        availabilityResult.result = false;
+        availabilityResult.message = suggestions.Message;
+      } else if (suggestions.Data.length > 0) {
         availabilityResult.result = false;
         availabilityResult.message =
           "No Availability for the selected date and time. Please see the following suggestions at the DRG restaurants.";

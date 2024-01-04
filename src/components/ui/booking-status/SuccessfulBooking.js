@@ -19,7 +19,7 @@ const SuccessfulBooking = ({ booking }) => {
 
   const homePage = () => {
     defaultStep();
-    router.push("/");
+    window.location.href = "/";
   };
   return (
     <div className="bg-white  rounded px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">

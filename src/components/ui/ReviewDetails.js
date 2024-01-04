@@ -41,6 +41,7 @@ const ReviewDetails = () => {
     };
 
     try {
+      console.log("booking:", booking);
       const bookingResponse = await BookingWithStripeToken(booking);
 
       console.log("bookingResponse:", bookingResponse);
@@ -61,13 +62,7 @@ const ReviewDetails = () => {
           bookingResponse.bookingResult.Status === "CreditCardRequired")
       ) {
         setBookingResult(bookingResponse.bookingResult);
-        const localStorageItem = {
-          bookingDetails: booking,
-          bookingResult: bookingResponse.bookingResult,
-        };
 
-        sessionStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
-        console.log("bookingResult:", bookingResult);
         const publishableKey =
           bookingResponse.bookingResult.StripePublishableKey;
         console.log("publishableKey:", publishableKey);
@@ -75,16 +70,27 @@ const ReviewDetails = () => {
         const stripe = await stripePromise;
         const stripeSessionId =
           bookingResponse.bookingResult.StripeCheckoutSessionId;
-
+        console.log("bookingResult:", bookingResult);
         // Alert user about redirection
         if (typeof window !== "undefined") {
           // Check that window is defined (i.e., code is running in the browser)
+
+          const localStorageItem = {
+            bookingDetails: booking,
+            bookingResult: bookingResponse.bookingResult,
+          };
+
+          sessionStorage.setItem(
+            "bookingInfo",
+            JSON.stringify(localStorageItem)
+          );
+          console.log("bookingResult:", bookingResult);
+
           const userAgreed = window.confirm(
             "You will be redirected to the payment gateway for payment. Do you want to proceed?"
           );
 
           if (userAgreed && bookingResponse.sessionURL != null) {
-            console.log("Stripe Session URL:", bookingResponse.sessionURL);
             router.push(bookingResponse.sessionURL); // Use Next.js router for client-side redirection
           } else {
             console.error(
@@ -95,7 +101,8 @@ const ReviewDetails = () => {
         }
       } else if (
         bookingResponse.bookingResult.Status === "InvalidBooking" ||
-        bookingResponse.bookingResult.Status === "NoAvailability"
+        bookingResponse.bookingResult.Status === "NoAvailability" ||
+        bookingResponse.bookingResult.Message
       ) {
         const localStorageItem = {
           bookingDetails: booking,
@@ -114,11 +121,11 @@ const ReviewDetails = () => {
   };
 
   const navigateToTerms = () => {
-    variableStep(5); // Assuming step 6 is for TermsAndConditions
+    variableStep(5); // Assuming step 5 is for TermsAndConditions
   };
 
   const navigateToPrivacyPolicy = () => {
-    variableStep(6); // Assuming step 7 is for PrivacyPolicy
+    variableStep(6); // Assuming step 6 is for PrivacyPolicy
   };
 
   return (
