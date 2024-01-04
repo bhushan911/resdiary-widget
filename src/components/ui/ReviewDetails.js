@@ -21,7 +21,7 @@ const ReviewDetails = () => {
 
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const { nextStep, prevStep, variableStep } = useContext(NavigationContext);
-  const [stripePublishableKey, setStripePublishableKey] = useState(null);
+  // const [stripePublishableKey, setStripePublishableKey] = useState(null);
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
   const handleTermsChange = (event) => {
@@ -43,49 +43,34 @@ const ReviewDetails = () => {
     try {
       console.log("booking:", booking);
       const bookingResponse = await BookingWithStripeToken(booking);
-
       console.log("bookingResponse:", bookingResponse);
+      // Set the result and sessionStorage immediately after receiving the response
+      setBookingResult(bookingResponse.bookingResult);
+      const localStorageItem = {
+        bookingDetails: booking,
+        bookingResult: bookingResponse.bookingResult,
+      };
+      sessionStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
+
       if (
         bookingResponse &&
         bookingResponse.bookingResult.Status === "Success"
       ) {
-        setBookingResult(bookingResponse.bookingResult);
-        const localStorageItem = {
-          bookingDetails: booking,
-          bookingResult: bookingResponse.bookingResult,
-        };
-        sessionStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
         router.push("/booking-status");
       } else if (
         bookingResponse &&
         (bookingResponse.bookingResult.Status === "PaymentRequired" ||
           bookingResponse.bookingResult.Status === "CreditCardRequired")
       ) {
-        setBookingResult(bookingResponse.bookingResult);
-
-        const publishableKey =
-          bookingResponse.bookingResult.StripePublishableKey;
-        console.log("publishableKey:", publishableKey);
-        setStripePublishableKey(publishableKey);
+        // const publishableKey =
+        //   bookingResponse.bookingResult.StripePublishableKey;
+        // console.log("publishableKey:", publishableKey);
+        // setStripePublishableKey(publishableKey);
         const stripe = await stripePromise;
-        const stripeSessionId =
-          bookingResponse.bookingResult.StripeCheckoutSessionId;
         console.log("bookingResult:", bookingResult);
         // Alert user about redirection
         if (typeof window !== "undefined") {
           // Check that window is defined (i.e., code is running in the browser)
-
-          const localStorageItem = {
-            bookingDetails: booking,
-            bookingResult: bookingResponse.bookingResult,
-          };
-
-          sessionStorage.setItem(
-            "bookingInfo",
-            JSON.stringify(localStorageItem)
-          );
-          console.log("bookingResult:", bookingResult);
-
           const userAgreed = window.confirm(
             "You will be redirected to the payment gateway for payment. Do you want to proceed?"
           );
@@ -104,11 +89,6 @@ const ReviewDetails = () => {
         bookingResponse.bookingResult.Status === "NoAvailability" ||
         bookingResponse.bookingResult.Message
       ) {
-        const localStorageItem = {
-          bookingDetails: booking,
-          bookingResult: bookingResponse.bookingResult,
-        };
-        sessionStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
         router.push("/booking-status");
       }
     } catch (error) {
