@@ -8,6 +8,7 @@ const FailedBooking = ({ booking }) => {
   const { defaultStep } = useContext(NavigationContext);
   const homePage = () => {
     defaultStep();
+    localStorage.clear();
     window.location.href = "/";
   };
   return (

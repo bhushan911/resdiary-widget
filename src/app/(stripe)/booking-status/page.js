@@ -12,14 +12,11 @@ const BookingStatus = () => {
   const [sessionResult, setSessionResult] = useState(null); // To store session result
 
   useEffect(() => {
-    const bookingData = sessionStorage.getItem("bookingInfo");
+    const bookingData = localStorage.getItem("bookingInfo");
 
     if (bookingData) {
       const parsedBookingInfo = JSON.parse(bookingData);
       setBookingInfo(parsedBookingInfo); // Update bookingInfo state
-      // sessionStorage.removeItem("bookingInfo"); // Clear sessionStorage
-    } else {
-      // router.push("http://localhost:3000/"); // Redirect if no booking info
     }
   }, [router]);
 
@@ -49,7 +46,6 @@ const BookingStatus = () => {
               message: "Booking session failed.",
             });
           }
-          // console.log("Call Booking Session");
         };
         callBookingSession();
       } else {
