@@ -12,7 +12,7 @@ const BookingStatus = () => {
   const [sessionResult, setSessionResult] = useState(null); // To store session result
 
   useEffect(() => {
-    const bookingData = sessionStorage.getItem("bookingInfo");
+    const bookingData = localStorage.getItem("bookingInfo");
 
     if (bookingData) {
       const parsedBookingInfo = JSON.parse(bookingData);

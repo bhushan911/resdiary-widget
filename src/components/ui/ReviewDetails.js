@@ -50,7 +50,7 @@ const ReviewDetails = () => {
         bookingDetails: booking,
         bookingResult: bookingResponse.bookingResult,
       };
-      sessionStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
+      localStorage.setItem("bookingInfo", JSON.stringify(localStorageItem));
 
       if (
         bookingResponse &&

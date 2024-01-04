@@ -19,6 +19,7 @@ const SuccessfulBooking = ({ booking }) => {
 
   const homePage = () => {
     defaultStep();
+    localStorage.clear();
     window.location.href = "/";
   };
   return (
