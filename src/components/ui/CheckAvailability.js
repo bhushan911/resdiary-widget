@@ -149,7 +149,7 @@ function CheckAvailability() {
                 {restaurantDetail && (
                   <button
                     onClick={navigateToWebsite}
-                    className="text-white bg-blue-600 rounded-md hover:bg-blue-700 hover:text-gray-800 transition duration-300 text-md my-4 mx-auto p-2 hover:opacity-90  "
+                    className="text-white bg-blue-600 rounded-md hover:bg-blue-700 hover:text-gray-800 transition duration-300 text-md my-4 mx-auto p-2 hover:opacity-90"
                   >
                     Book A Table
                   </button>

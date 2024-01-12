@@ -226,25 +226,26 @@ const checkAvailability = async (
         selectedTime,
         selectedPartySize
       );
-      // if (suggestions.Data && suggestions.Data.length > 0) {
-      suggestions.Data.forEach((restaurant) => {
-        const name = restaurant.Name;
-        const fullAddress = restaurant.FullAddress;
-        console.log(`Name: ${name}, Full Address: ${fullAddress}`);
-      });
-      let restaurantDetails = [];
-      for (const restaurant of suggestions.Data) {
-        const name = restaurant.AccessedName;
-        try {
-          const response = await getRestaurantInfo(name);
-          restaurantDetails.push(response);
-        } catch (error) {
-          console.error(`Error fetching details for ${name}:`, error);
+      console.log("suggestions", suggestions);
+
+      if (suggestions.Data && suggestions.Data.length > 0) {
+        suggestions.Data.forEach((restaurant) => {
+          const name = restaurant.Name;
+          const fullAddress = restaurant.FullAddress;
+          console.log(`Name: ${name}, Full Address: ${fullAddress}`);
+        });
+        // let restaurantDetails = [];
+        for (const restaurant of suggestions.Data) {
+          const name = restaurant.AccessedName;
+          try {
+            const response = await getRestaurantInfo(name);
+            availabilityResult.restaurantDetails.push(response);
+          } catch (error) {
+            console.error(`Error fetching details for ${name}:`, error);
+          }
         }
       }
-      // }
 
-      console.log("suggestions", suggestions);
       // console.log("restaurantDetails", restaurantDetails);
 
       if (suggestions.Message) {
@@ -255,7 +256,7 @@ const checkAvailability = async (
         availabilityResult.message =
           "No Availability for the selected date and time. Please see the following suggestions at the DRG restaurants.";
         availabilityResult.restaurants = suggestions.Data;
-        availabilityResult.restaurantDetails = restaurantDetails;
+        // availabilityResult.restaurantDetails = restaurantDetails;
       } else {
         availabilityResult.result = false;
         availabilityResult.message =
@@ -308,7 +309,7 @@ const getRestaurantInfo = async (microSiteName) => {
     });
 
     data = await result.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     return console.log(`Error is : ${error}`);
@@ -333,6 +334,7 @@ const SearchAvailabilityByDistance = async (
     const result = await fetch(url, {
       headers: {
         Authorization: `Bearer ${currentToken}`,
+        // Authorization: `Bearer sdfasiansidnaisndiansidnaisdniansidniniasndian`,
         "Content-Type": "application/json",
       },
       cache: "no-store",
@@ -340,10 +342,20 @@ const SearchAvailabilityByDistance = async (
     });
 
     const data = await result.json();
-    console.log(data);
+    console.log("data", data);
+    // const resdiaryError = {
+    //   Message:
+    //     "An unexpected error has occurred. Please contact ResDiary support and quote the following Id: 1e4b3b1e-0e1e-4e1e-8e1e-1e1e1e1e1e1e",
+    //   ValidationErrors: [],
+    //   ApiRequestId: "1e4b3b1e-0e1e-4e1e-8e1e-1e1e1e1e1e1e",
+    //   ApiRequestUrl: "www.failedtest.com",
+    // };
+    // console.log(resdiaryError);
     return data;
+    // return resdiaryError
   } catch (error) {
-    return console.log(`Error is : ${error}`);
+    console.log(`Error is : ${error}`);
+    return data;
   }
 };
 
