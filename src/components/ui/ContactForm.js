@@ -33,36 +33,45 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="bg-white rounded px-4 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+    <div className="bg-white rounded p-2 mb-4 max-w-lg mx-auto my-5">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-3">
         <h1 className="text-lg font-bold text-gray-900">Contact Details </h1>
       </div>
+      <div className="border-t-2 border-gray-200 pb-4"></div>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            className="border rounded py-2 px-3 text-grey-darker isRequired"
-            value={values.firstName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-          />{" "}
-          {touched.firstName && errors.firstName ? (
-            <div className="text-red-500 text-xs mt-1">{errors.firstName}</div>
-          ) : null}
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            className="border rounded py-2 px-3 text-grey-darker isRequired"
-            value={values.lastName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-          />
-          {touched.lastName && errors.lastName ? (
-            <div className="text-red-500 text-xs mt-1">{errors.lastName}</div>
-          ) : null}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+          <div>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              className="border w-full block rounded py-2 px-3 text-grey-darker isRequired"
+              value={values.firstName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+            {touched.firstName && errors.firstName && (
+              <div className="text-red-500 text-xs ml-1 mt-1">
+                {errors.firstName}
+              </div>
+            )}
+          </div>
+          <div>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              className="border w-full  block rounded py-2 px-3 text-grey-darker isRequired"
+              value={values.lastName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+            {touched.lastName && errors.lastName && (
+              <div className="text-red-500 text-xs ml-1 mt-1">
+                {errors.lastName}
+              </div>
+            )}
+          </div>
         </div>
         <div>
           <PhoneInput
@@ -73,10 +82,12 @@ const ContactForm = () => {
             onChange={handlePhoneChange}
             error={errors.phone && touched.phone && errors.phone}
             onBlur={() => setFieldTouched("phone", true)}
-            className="border rounded py-2 px-3 text-grey-darker w-full isRequired isNumber"
+            className="border rounded  py-2 px-3 text-grey-darker w-full isRequired isNumber"
           />
           {errors.phone && touched.phone && (
-            <div className="error text-red-500 text-xs">{errors.phone}</div>
+            <div className="error ml-1 mt-1 text-red-500 text-xs">
+              {errors.phone}
+            </div>
           )}
         </div>
         <div className="my-4">
@@ -90,7 +101,7 @@ const ContactForm = () => {
             onChange={handleChange}
           />
           {touched.email && errors.email ? (
-            <div className="text-red-500 text-xs mt-1">{errors.email}</div>
+            <div className="text-red-500 text-xs ml-1 mt-1">{errors.email}</div>
           ) : null}
         </div>
         <div className="mb-4">
@@ -115,31 +126,35 @@ const ContactForm = () => {
             onChange={handleChange}
           ></textarea>
         </div>
-        <div className="mb-4 flex items-center">
-          <label className="ml-2 text-sm font-bold">
-            I would like to receive news and offers from DRG Group by:
-          </label>
-          <input
-            name="receiveEmailMarketingsubscribe"
-            type="checkbox"
-            className="form-checkbox  ml-2 w-4 h-4 text-gray-600"
-            checked={values.receiveEmailMarketingsubscribe}
-            onBlur={handleBlur}
-            onChange={handleChange}
-          />
-          <label className="ml-2 text-sm font-bold">Email</label>
+        <div className="mb-4 ml-1 flex flex-col  ">
+          <div className="">
+            <label className="text-justify text-sm font-bold">
+              I would like to receive news and offers from DRG Group by:
+            </label>
+          </div>
+          <div className=" ">
+            <input
+              name="receiveEmailMarketingsubscribe"
+              type="checkbox"
+              className="form-checkbox ml-2 w-4 h-4 text-gray-600"
+              checked={values.receiveEmailMarketingsubscribe}
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+            <label className="ml-2 py-2 text-sm font-bold">Email</label>
+          </div>
         </div>
         <div className="flex justify-between items-center mt-4">
           <button
             type="button"
             onClick={() => prevStep()}
-            className="text-indigo-600 hover:text-indigo-800 transition duration-300"
+            className="bg-indigo-500 text-white py-2 px-4 w-24 h-10 rounded-md hover:bg-indigo-800 transition duration-300"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition duration-300"
+            className="bg-indigo-500 text-white py-2 px-4 w-24 h-10 rounded-md hover:bg-indigo-800 transition duration-300"
           >
             Next
           </button>
