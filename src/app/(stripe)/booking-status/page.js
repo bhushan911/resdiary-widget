@@ -68,13 +68,11 @@ const BookingStatus = () => {
 
   return (
     <div className=" flex flex-col items-center justify-center">
-      <div className="bg-white rounded-lg border-2 border-black shadow-lg overflow-hidden max-w-screen-md w-full mx-2 md:mx-0 my-10">
-        <div className="border-b-2 border-black ">
-          <div className="flex-1  font-bold ">
-            <h1 className="text-3xl text-center my-2">DRG</h1>
-          </div>
-          {renderBookingStatus()}
+      <div className="bg-white rounded-lg border-2 border-black shadow-lg overflow-hidden  w-full  mx-2 md:mx-0 my-10">
+        <div className="flex-1 font-bold ">
+          <h1 className="text-3xl text-center my-2">DRG</h1>
         </div>
+        {renderBookingStatus()}
       </div>
     </div>
   );

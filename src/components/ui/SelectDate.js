@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BookingContext } from "../../contexts/BookingContext";
+import { FaRegCalendarDays } from "react-icons/fa6";
 
 function SelectDate() {
   const {
@@ -55,28 +56,25 @@ function SelectDate() {
   };
 
   return (
-    <div className="p-4">
-      <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-        Select Date:
+    <div className="p-4 text-lg sm:text-base font-bold text-gray-800">
+      <label htmlFor="date" className="block py-2">
+        Select Date
       </label>
-      {/* <div className="date-picker-container"> */}
-      {/* <div
-        className="block w-full pl-3 pr-10 py-2 text-base border-black border-2  focus:border-indigo-500 sm:text-sm rounded-md"
-        // className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-      > */}
-      <DatePicker
-        id="date"
-        selected={selectedDate}
-        onChange={handleDateChange}
-        dateFormat="yyyy-MM-dd"
-        filterDate={isAvailableDate}
-        // className="input-field"
-        // wrapperClassName="date-picker-wrapper"
-        className="block w-full pl-3 pr-10 py-2 text-base border-black border-2 focus:border-indigo-500 sm:text-sm rounded-md"
-        dayClassName={dayClassName}
-      />
+      <div className="flex flex-col relative w-full">
+        {" "}
+        {/* Make the div relative */}
+        <DatePicker
+          id="date"
+          selected={selectedDate}
+          onChange={handleDateChange}
+          dateFormat="yyyy-MM-dd"
+          filterDate={isAvailableDate}
+          className="w-full pl-3 pr-10 py-2 text-base border-2 border-black focus:border-indigo-500 sm:text-sm rounded-md" // Add pr-10 to make room for the icon
+        />
+        <FaRegCalendarDays className="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-700 pointer-events-none" />{" "}
+        {/* Position the icon */}
+      </div>
     </div>
-    // </div>
   );
 }
 

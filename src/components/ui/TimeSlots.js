@@ -79,13 +79,13 @@ export default function TimeSlots() {
   };
 
   return (
-    <div className="p-4">
-      <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-        Select Time:
+    <div className="p-4 text-lg sm:text-base font-bold">
+      <label htmlFor="time" className="block py-2  text-gray-700">
+        Select Time
       </label>
       <select
         id="time"
-        className="block w-full pl-3 pr-10 py-2 text-base border-black border-2 focus:border-indigo-500 sm:text-sm rounded-md"
+        className="block w-full pl-3 pr-10 py-2  border-black border-2 focus:border-indigo-500 sm:text-sm rounded-md"
         value={selectedTime}
         onChange={handleTimeChange}
         disabled={!isMounted}

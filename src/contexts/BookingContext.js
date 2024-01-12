@@ -19,6 +19,7 @@ export const BookingProvider = ({
   setup,
   availabilitySearch,
   availabilityForDateRangeV2,
+  restaurantDetails,
 }) => {
   const [partySize, setPartySize] = useState(setup.OnlinePartySizeDefault);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -164,6 +165,7 @@ export const BookingProvider = ({
         validationSchema,
         bookingResult,
         setBookingResult,
+        restaurantDetails,
       }}
     >
       {children}

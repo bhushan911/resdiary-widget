@@ -1,6 +1,9 @@
 "use client";
 import React, { useContext } from "react";
 import { BookingContext } from "../../contexts/BookingContext";
+import { FaRegCalendarDays } from "react-icons/fa6";
+import { MdPeopleAlt } from "react-icons/md";
+import { FaRegClock } from "react-icons/fa6";
 
 function ReviewComponent() {
   const { partySize, selectedTime, selectedDate } = useContext(BookingContext);
@@ -8,21 +11,19 @@ function ReviewComponent() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between  mb-2 ">
-        <div className="flex flex-row w-full text-gray-900 font-bold">
-          {/* Ensure each child flex item has flex-1 to divide space equally */}
-          {/* <div className="flex-1 border-black border-2 font-bold "> */}
-          <div className="flex-1  font-bold ">
-            <h1 className="text-3xl text-center my-2">DRG</h1>
-          </div>
-          {/* <div className="flex-1 border-black border-2 flex items-center justify-center"> */}
-          <div className="flex-1  flex items-center justify-center">
-            <span className="text-lg">{date}</span>
-            <span className="mx-2 text-lg">|</span>
-            <span className="text-lg">{partySize}</span>
-            <span className="mx-2 text-lg">|</span>
-            <span className="text-lg">{selectedTime}</span>
-          </div>
+      <div className="flex flex-col sm:flex-row justify-between my-2 ">
+        <div className="flex basis-1/3 font-bold ">
+          <h1 className="text-3xl text-center mx-auto ">DRG</h1>
+        </div>
+        <div className="flex basis-2/3  font-bold  items-center justify-center">
+          <FaRegCalendarDays className="h-5 w-5 mr-1" />
+          <span className="text-lg">{date}</span>
+          <span className="mx-2 text-lg">|</span>
+          <MdPeopleAlt className="h-5 w-5 mr-1" />
+          <span className="text-lg">{partySize}</span>
+          <span className="mx-2 text-lg">|</span>
+          <FaRegClock className="h-5 w-5 mr-1" />
+          <span className="text-lg">{selectedTime}</span>
         </div>
       </div>
     </div>

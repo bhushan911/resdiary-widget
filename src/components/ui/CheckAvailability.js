@@ -77,25 +77,39 @@ function CheckAvailability() {
         Next
       </button>
       {checkMessage && (
-        <div className="text-red-500 text-sm">{checkMessage}</div>
+        <div className="text-red-500 text-sm font:bold text-center">
+          {checkMessage}
+        </div>
       )}
 
       {availability.restaurants && availability.restaurants.length > 0 ? (
-        <div className="border-red border-2 mt-4 p-4 bg-gray-100 rounded-lg">
-          <p className="text-gray-600 text-sm">{availability.message}</p>
+        <div className="border-red border-2 mb-2 p-2 bg-gray-100 rounded-lg mx-2 ">
+          <p className="text-gray-800 font:bold text-md text-center">
+            {availability.message}
+          </p>
           {availability.restaurants.map((restaurant, index) => {
             // Find corresponding restaurant details
             const restaurantDetail = availability.restaurantDetails.find(
               (detail) => detail.AccessedName === restaurant.AccessedName
             );
+            const navigateToWebsite = () => {
+              if (restaurantDetail && restaurantDetail.Website) {
+                // Open the website in a new tab
+                window.open(
+                  restaurantDetail.Website,
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }
+            };
 
             // Determine if this is the restaurant with accessible timeslots
             const isAccessibleRestaurant =
               restaurant.AccessedName === availability.accessedName;
 
             return (
-              <div key={index} className="flex flex-col">
-                <span className="font-semibold text-gray-800">
+              <div key={index} className="flex flex-col ">
+                <span className="text-lg font-semibold text-gray-800 mx-auto">
                   {restaurant.Name}
                 </span>
                 {/* Make the image clickable and redirect to the restaurant's website */}
@@ -108,7 +122,7 @@ function CheckAvailability() {
                     <Image
                       src={`${restaurantDetail.MainImage.Url}`}
                       alt={restaurant.Name}
-                      className="w-64 h-40 items-center border-2 border-gray-600 justify-center rounded-md mt-2"
+                      className="w-64 h-40 items-center shadow-lg justify-center rounded my-2  mx-auto hover:opacity-60  transition duration-300"
                       width={500}
                       height={500}
                     />
@@ -120,7 +134,7 @@ function CheckAvailability() {
                       key={timeIndex}
                       onClick={() => handleTimeSlotClick(timeSlot.TimeSlot)}
                       disabled={!isAccessibleRestaurant} // Enable only for the specific restaurant
-                      className={`px-3 py-1 text-sm rounded-md ${
+                      className={`px-2 py-1 mx-auto text-base rounded-md ${
                         format(new Date(timeSlot.TimeSlot), "HH:mm:ss") ===
                         selectedTime
                           ? "bg-blue-500 text-white"
@@ -133,14 +147,12 @@ function CheckAvailability() {
                 </div>
                 {/* Link to restaurant's website if details are found */}
                 {restaurantDetail && (
-                  <a
-                    href={restaurantDetail.Website}
-                    className="text-blue-500 hover:text-blue-600 transition duration-300 text-lg mt-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={navigateToWebsite}
+                    className="text-white bg-blue-600 rounded-md hover:bg-blue-700 hover:text-gray-800 transition duration-300 text-md my-4 mx-auto p-2 hover:opacity-90  "
                   >
                     Book A Table
-                  </a>
+                  </button>
                 )}
               </div>
             );
@@ -148,7 +160,9 @@ function CheckAvailability() {
         </div>
       ) : (
         <div>
-          <p className="text-gray-600 text-sm">{availability.message}</p>
+          <p className="text-gray-800 font:bold text-md text-center mb-2">
+            {availability.message}
+          </p>
         </div>
       )}
     </div>

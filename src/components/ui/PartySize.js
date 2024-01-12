@@ -17,17 +17,13 @@ function PartySize() {
     (_, index) => index + MinOnlinePartySize
   );
   return (
-    <div className="p-4">
-      <label
-        htmlFor="partySize"
-        className="block text-sm font-medium text-gray-700"
-      >
+    <div className="p-4 text-lg sm:text-base font-bold text-gray-800">
+      <label htmlFor="partySize" className="block py-2 ">
         Party Size
       </label>
       <select
         id="partySize"
-        // className="block w-full pl-3 pr-10 py-2 text-base border-gray-800 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        className="block w-full pl-3 pr-10 py-2 text-base border-black border-2  focus:border-indigo-500 sm:text-sm rounded-md"
+        className="block w-full pl-3 pr-10 py-2 border-black border-2  focus:border-indigo-500 rounded-md"
         value={partySize}
         onChange={handlePartySizeChange}
         required

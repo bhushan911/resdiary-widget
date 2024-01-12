@@ -109,17 +109,19 @@ const ReviewDetails = () => {
   };
 
   return (
-    <div className="bg-white  rounded px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+    <div className="bg-white rounded p-2 mb-4 max-w-lg mx-auto my-5">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-3">
         <h1 className="text-lg font-bold text-gray-900">
           Confirm Your Details Below
         </h1>
       </div>
       <div className="border-t-2 border-gray-200 pt-4">
-        <div className="flex flex-col space-y-2">
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Date:</span>
-            <span>
+        <div className="flex flex-col  space-y-2">
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              Date:
+            </span>
+            <span className="basis-3/4 break-all">
               {selectedDate.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -127,39 +129,53 @@ const ReviewDetails = () => {
               })}
             </span>
           </div>
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Time:</span>
-            <span>{selectedTime}</span>
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              Time:
+            </span>
+            <span className="basis-3/4 break-all">{selectedTime}</span>
+          </div>
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              People:
+            </span>
+            <span className="basis-3/4 break-all">{partySize}</span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">People:</span>
-            <span>{partySize}</span>
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              First Name:
+            </span>
+            <span className="basis-3/4 break-all">{values.firstName}</span>
           </div>
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">First Name:</span>
-            <span>{values.firstName}</span>
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              Last Name:
+            </span>
+            <span className="basis-3/4 break-all">{values.lastName}</span>
           </div>
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Last Name:</span>
-            <span>{values.lastName}</span>
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              Mobile Number:
+            </span>
+            <span className="basis-3/4  break-all">{values.mobileNumber}</span>
           </div>
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Mobile Number:</span>
-            <span>{values.mobileNumber}</span>
-          </div>
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Email Address:</span>
-            <span>{values.email}</span>
+          <div className="flex md:flex-row justify-start">
+            <span className="font-semibold basis-1/4 min-w-[140px] ">
+              Email Address:
+            </span>
+            <span className="basis-3/4   break-all">{values.email}</span>
           </div>
         </div>
         <div className="mt-4">
           {availability.matchingTimeSlot.IsLeaveTimeRequired == true ? (
-            <p className="text-gray-800 text-md">
+            <p className="text-gray-800 font-semibold text-md text-start">
               Your table is required to be returned by{" "}
               {availability.matchingTimeSlot.LeaveTime}
             </p>
           ) : (
-            <p className="text-gray-800 text-md">Leave Time Not Required</p>
+            <p className="text-gray-800 font-semibold text-md text-center">
+              Leave Time Not Required
+            </p>
           )}
         </div>
         <div className="mt-4 flex items-center">
@@ -191,16 +207,16 @@ const ReviewDetails = () => {
       <div className="flex justify-between items-center mt-6">
         <button
           onClick={() => prevStep()}
-          className="text-blue-600 hover:underline"
+          className="bg-indigo-500 text-white py-2 px-4 w-24 h-10 rounded-md hover:bg-indigo-800 transition duration-300"
         >
           Previous
         </button>
         <button
           onClick={handleBookingSubmission}
-          className="inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
+          className="inline-block bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-800 disabled:opacity-50"
           disabled={!isTermsAccepted}
         >
-          Complete Booking
+          Confirm Booking
         </button>
       </div>
     </div>

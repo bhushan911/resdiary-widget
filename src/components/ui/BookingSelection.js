@@ -4,11 +4,14 @@ import PartySize from "./PartySize";
 import SelectDate from "./SelectDate";
 import TimeSlots from "./TimeSlots";
 import CheckAvailability from "./CheckAvailability";
+import { BookingContext } from "../../contexts/BookingContext";
 
 export default function BookingSelection({}) {
+  const { restaurantDetails } = useContext(BookingContext);
+  console.log("BookingSelection", restaurantDetails);
   return (
     <div>
-      <div className="booking-widget">
+      <div className="max-w-xl mx-auto pb-2">
         <div>
           <PartySize />
           <SelectDate />

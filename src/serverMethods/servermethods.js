@@ -295,6 +295,7 @@ const getRestaurantInfo = async (microSiteName) => {
   const base_url = process.env.BASE_URL;
 
   const url = `${base_url}ConsumerApi/v1/Restaurant/${microSiteName}`;
+  console.log(url);
   var data;
   try {
     const result = await fetch(url, {
@@ -302,12 +303,12 @@ const getRestaurantInfo = async (microSiteName) => {
         Authorization: `Bearer ${currentToken}`,
         "Content-Type": "application/json",
       },
-      //cache: "no-store",
+      cache: "no-store",
       method: "GET",
     });
 
     data = await result.json();
-    // console.log(data);
+    console.log(data);
     return data;
   } catch (error) {
     return console.log(`Error is : ${error}`);
@@ -327,6 +328,7 @@ const SearchAvailabilityByDistance = async (
   console.log(`Date: ${date} Time: ${time} Party Size: ${selectedPartySize}`);
 
   const url = `${base_url}ConsumerApi/v1/Restaurant/SearchAvailabilityByDistance?lat=${latitude}&lon=${longitude}&visitDate=${date}&visitTime=${time}&covers=${selectedPartySize}&page=1&pageSize=5&radius=1000&&visitTimeWindow=240`;
+  console.log(url);
   try {
     const result = await fetch(url, {
       headers: {
@@ -338,7 +340,7 @@ const SearchAvailabilityByDistance = async (
     });
 
     const data = await result.json();
-
+    console.log(data);
     return data;
   } catch (error) {
     return console.log(`Error is : ${error}`);

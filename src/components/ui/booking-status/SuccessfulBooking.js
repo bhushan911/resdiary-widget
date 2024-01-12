@@ -23,35 +23,59 @@ const SuccessfulBooking = ({ booking }) => {
     window.location.href = "/";
   };
   return (
-    <div className="bg-white  rounded px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto my-10">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+    <div className="bg-white rounded p-2 mb-4 max-w-lg mx-auto my-2">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-3">
         <h1 className="text-lg font-bold text-gray-900">Booking Successful</h1>
       </div>
-      <div className="border-t-2 border-gray-200 pt-4">
+      <div className="border-t-2 border-gray-200 pt-4 ">
         <div className="flex flex-col space-y-2">
-          <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Reference:</span>
-            <span>{booking.Booking.Reference}</span>
+          <div className="flex md:flex-row  justify-start">
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Reference:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.Reference}
+            </span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Restaurant:</span>
-            <span>{booking.Booking.RestaurantName}</span>
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Restaurant:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.RestaurantName}
+            </span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Visit Date:</span>
-            <span>{booking.Booking.VisitDate.split("T")[0]}</span>
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Visit Date:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.VisitDate.split("T")[0]}
+            </span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Visit Time:</span>
-            <span>{booking.Booking.VisitTime}</span>
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Visit Time:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.VisitTime}
+            </span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Party Size:</span>
-            <span>{booking.Booking.PartySize}</span>
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Party Size:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.PartySize}
+            </span>
           </div>
           <div className="flex justify-start">
-            <span className="font-semibold min-w-[140px]">Comments:</span>
-            <span>{booking.Booking.SpecialRequests}</span>
+            <span className="font-semibold basis-1/4 max-w-[100px] ">
+              Comments:
+            </span>
+            <span className="basis-3/4  break-all">
+              {booking.Booking.SpecialRequests}
+            </span>
           </div>
         </div>
         <div className="flex py-4 justify-center">
