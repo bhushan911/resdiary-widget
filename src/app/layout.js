@@ -9,6 +9,7 @@ import {
 } from "../serverMethods/servermethods";
 import { NavigationProvider } from "../contexts/NavigationContext";
 import Image from "next/image";
+import BackButton from "../components/ui/layout/BackButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,12 +47,7 @@ export default async function RootLayout({ children }) {
                 <div className="container max-w-5xl min-h-screen mx-auto font-sans  ">
                   <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:py-2 text-md mx-auto">
                     <div className="basis-1/3 text-lg ">
-                      <a
-                        href="javascript:history.back()"
-                        className="whitespace-nowrap font-medium text-gray-200 hover:text-yellow-600 leading-3"
-                      >
-                        Back to Site
-                      </a>
+                      <BackButton />
                     </div>
                     <div className="basis-1/3 flex justify-center items-center ">
                       <a href="#">
@@ -61,7 +57,7 @@ export default async function RootLayout({ children }) {
                           alt="logo"
                           height={100}
                           width={150}
-                          className="max-w-[220px] max-h-[140px] min-w-[150px] min-h-[100px]"
+                          className="max-w-[220px] max-h-[130px] min-w-[180px] min-h-[80px]"
                         />
                       </a>
                     </div>

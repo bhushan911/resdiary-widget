@@ -69,7 +69,7 @@ function SelectDate() {
           onChange={handleDateChange}
           dateFormat="yyyy-MM-dd"
           filterDate={isAvailableDate}
-          className="w-full pl-3 pr-10 py-2 text-base border-2 border-black focus:border-indigo-500 sm:text-sm rounded-md" // Add pr-10 to make room for the icon
+          className="w-full pl-3 pr- py-2 text-base border-2 border-black focus:border-indigo-500 sm:text-sm rounded-md" // Add pr-10 to make room for the icon
         />
         <FaRegCalendarDays className="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-700 pointer-events-none" />{" "}
         {/* Position the icon */}
