@@ -32,14 +32,21 @@ export const BookingProvider = ({
   const [selectedPromotion, setSelectedPromotion] = useState(null);
   const [bookingResult, setBookingResult] = useState(null); // New state to store booking result
   const { nextStep } = useContext(NavigationContext);
-  const [availability, setAvailability] = useState("");
+  const [availability, setAvailability] = useState({
+    accessedName: null,
+    result: false,
+    matchingTimeSlot: null,
+    restaurants: [],
+    message: null,
+    restaurantDetails: [],
+  });
 
   const updatePartySize = async (newSize) => {
     setPartySize(newSize);
     console.log(availabilitySearch);
-    console.log(
-      `newSize: ${partySize} selectedDate: ${selectedDate} newSetup: ${newSetup.OnlinePartySizeDefault}`
-    );
+    // console.log(
+    //   `newSize: ${partySize} selectedDate: ${selectedDate} newSetup: ${newSetup.OnlinePartySizeDefault}`
+    // );
     // Call your APIs here
     const newAvailabilityForDateRangeV2 = await getAvailabilityForDateRangeV2(
       selectedDate,
@@ -57,7 +64,7 @@ export const BookingProvider = ({
 
   const updateDate = async (date) => {
     setSelectedDate(date);
-    console.log(selectedDate);
+    // console.log(selectedDate);
 
     // Call your APIs here
     const newSetup = await getSetup(date.toISOString().split("T")[0]);
@@ -68,12 +75,12 @@ export const BookingProvider = ({
 
     setNewSetup(newSetup);
     setNewAvailabilitySearch(newAvailabilitySearch);
-    console.log(newSetup);
-    console.log(newAvailabilitySearch);
+    // console.log(newSetup);
+    // console.log(newAvailabilitySearch);
 
-    console.log(
-      `newSize: ${partySize} selectedDate: ${date} newSetup: ${newSetup.OnlinePartySizeDefault}`
-    );
+    // console.log(
+    //   `newSize: ${partySize} selectedDate: ${date} newSetup: ${newSetup.OnlinePartySizeDefault}`
+    // );
   };
   const updateTime = async (time) => {
     setSelectedTime(time);
