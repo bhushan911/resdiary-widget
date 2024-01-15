@@ -42,6 +42,13 @@ function SelectDate() {
     }
   };
 
+  const isSameMonth = (date1, date2) => {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth()
+    );
+  };
+
   const isAvailableDate = (date) => {
     const dateString = date.toISOString().split("T")[0];
     return availableDates.includes(dateString);
@@ -56,22 +63,22 @@ function SelectDate() {
   };
 
   return (
-    <div className="p-4 text-lg sm:text-base font-bold text-gray-800">
+    <div className="p-4 text-lg sm:text-base font-bold  ">
       <label htmlFor="date" className="block py-2">
         Select Date
       </label>
-      <div className="flex flex-col relative w-full">
-        {" "}
+      <div className="flex flex-col relative w-full ">
         {/* Make the div relative */}
         <DatePicker
+          // calendarClassName="min-w-[300px] "
           id="date"
           selected={selectedDate}
           onChange={handleDateChange}
           dateFormat="yyyy-MM-dd"
           filterDate={isAvailableDate}
-          className="w-full pl-3 pr- py-2 text-base border-2 border-black focus:border-indigo-500 sm:text-sm rounded-md" // Add pr-10 to make room for the icon
+          className="w-full pl-3 py-2 text-base border-2  border-black sm:text-sm rounded-md" // Add pr-10 to make room for the icon
         />
-        <FaRegCalendarDays className="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg text-gray-700 pointer-events-none" />{" "}
+        <FaRegCalendarDays className="absolute right-2 top-1/2 transform -translate-y-1/2 text-lg text-gray-800 pointer-events-none" />
         {/* Position the icon */}
       </div>
     </div>

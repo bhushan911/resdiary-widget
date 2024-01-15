@@ -52,7 +52,6 @@ export default async function RootLayout({ children }) {
                     <div className="basis-1/3 flex justify-center items-center ">
                       <a href="#">
                         <Image
-                          // src="/logo/citizenlogo.png"
                           src={restaurantDetails.Images[0].Url}
                           alt="logo"
                           height={100}
@@ -84,7 +83,7 @@ export default async function RootLayout({ children }) {
                       className="max-w-full h-full max-h-[570px] mb-4 rounded-lg"
                     />
                   </div>
-                  <div className="-mt-44 mb-4 shadwow-2xl max-w-2xl mx-auto justify-center items-center">
+                  <div className="-mt-44 mb-4 shadwow-2xl max-w-2xl min-h-2xl mx-auto justify-center items-center">
                     <div className="">{children}</div>
                   </div>
 

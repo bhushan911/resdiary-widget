@@ -20,15 +20,21 @@ const FailedBooking = ({ booking }) => {
           </div>
           <div className="border-t-2 border-gray-200 pt-4">
             <div className="flex flex-col space-y-2">
-              <div className="flex justify-start">
-                <span className="font-semibold min-w-[140px]">Message:</span>
-                <span>{booking.Message}</span>
+              <div className="flex md:flex-row  justify-start">
+                <span className="font-bold basis-1/4 max-w-[100px]">
+                  Message:
+                </span>
+                <span className="basis-3/4 font-semibold  break-all">
+                  {booking.Message}
+                </span>
               </div>
               <div className="flex justify-start">
-                <span className="font-semibold min-w-[140px]">
+                <span className="font-bold basis-1/4 max-w-[100px]">
                   Api Request URL:
                 </span>
-                <span>{booking.ApiRequestUrl}</span>
+                <span className="basis-3/4 font-semibold  break-all">
+                  {booking.ApiRequestUrl}
+                </span>
               </div>
             </div>
           </div>
@@ -40,13 +46,21 @@ const FailedBooking = ({ booking }) => {
           </div>
           <div className="border-t-2 border-gray-200 pt-4">
             <div className="flex flex-col space-y-2">
-              <div className="flex justify-start">
-                <span className="font-semibold min-w-[140px]">Status:</span>
-                <span>{booking.Status}</span>
+              <div className="flex md:flex-row  justify-start">
+                <span className="font-bold basis-1/4 max-w-[100px]">
+                  Status:
+                </span>
+                <span className="basis-3/4 font-semibold  break-all">
+                  {booking.Status}
+                </span>
               </div>
               <div className="flex justify-start">
-                <span className="font-semibold min-w-[140px]">Error:</span>
-                <span>{booking.Errors}</span>
+                <span className="font-bold basis-1/4 max-w-[100px]">
+                  Error:
+                </span>
+                <span className="basis-3/4 font-semibold  break-all">
+                  {booking.Errors}
+                </span>
               </div>
             </div>
           </div>
@@ -55,7 +69,7 @@ const FailedBooking = ({ booking }) => {
       <div className="flex py-4 justify-center">
         <button
           onClick={homePage}
-          className="w-1/2 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
+          className="w-1/3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300"
         >
           Book a Table
         </button>
