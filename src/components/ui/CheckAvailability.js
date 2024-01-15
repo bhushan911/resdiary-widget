@@ -20,9 +20,13 @@ function CheckAvailability() {
   const { nextStep } = useContext(NavigationContext);
 
   // Enable the Next button only when availability result is true and selectedTime is set
+  // useEffect(() => {
+  //   setIsNextEnabled(availability.result && selectedTime);
+  // }, [availability.result, selectedTime]);
   useEffect(() => {
-    setIsNextEnabled(availability.result && selectedTime);
-  }, [availability.result, selectedTime]);
+    console.log(availability); // Check what availability is when the component renders
+    setIsNextEnabled(availability?.result && selectedTime);
+  }, [availability?.result, selectedTime]);
 
   // Trigger the update of availability and enable the Next button
   const onClickCheckAvailability = async () => {
@@ -128,13 +132,16 @@ function CheckAvailability() {
                     />
                   </a>
                 )}
+                <span className="text-gray-800 font:bold text-md text-center my-2">
+                  Available Timeslots
+                </span>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {restaurant.AvailableTimeSlots.map((timeSlot, timeIndex) => (
                     <button
                       key={timeIndex}
                       onClick={() => handleTimeSlotClick(timeSlot.TimeSlot)}
                       disabled={!isAccessibleRestaurant} // Enable only for the specific restaurant
-                      className={`px-2 py-1 mx-auto text-base rounded-md ${
+                      className={`px-2 py-1 w-24 mx-auto text-base rounded-md ${
                         format(new Date(timeSlot.TimeSlot), "HH:mm:ss") ===
                         selectedTime
                           ? "bg-blue-500 text-white"
@@ -149,7 +156,7 @@ function CheckAvailability() {
                 {restaurantDetail && (
                   <button
                     onClick={navigateToWebsite}
-                    className="text-white bg-blue-600 rounded-md hover:bg-blue-700 hover:text-gray-800 transition duration-300 text-md my-4 mx-auto p-2 hover:opacity-90"
+                    className="bg-blue-600 text-white rounded-md hover:bg-blue-800  transition duration-300 text-md my-4 mx-auto p-2 "
                   >
                     Book A Table
                   </button>

@@ -11,7 +11,7 @@ export default function BookingSelection({}) {
   console.log("BookingSelection", restaurantDetails);
   return (
     <div>
-      <div className="max-w-xl mx-auto pb-2">
+      <div className="max-w-xl mx-auto pb-4">
         <div>
           <PartySize />
           <SelectDate />

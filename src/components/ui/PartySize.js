@@ -23,7 +23,7 @@ function PartySize() {
       </label>
       <select
         id="partySize"
-        className="block w-full pl-3 pr-10 py-2 border-black border-2  focus:border-indigo-500 rounded-md"
+        className="block w-full pl-3 pr-10 py-2 border-black border-2   rounded-md"
         value={partySize}
         onChange={handlePartySizeChange}
         required
