@@ -29,7 +29,6 @@ export const BookingProvider = ({
     useState(availabilitySearch);
   const [newAvailabilityForDateRangeV2, setNewAvailabilityForDateRangeV2] =
     useState(availabilityForDateRangeV2);
-  const [selectedPromotion, setSelectedPromotion] = useState(null);
   const [bookingResult, setBookingResult] = useState(null); // New state to store booking result
   const { nextStep } = useContext(NavigationContext);
   const [availability, setAvailability] = useState({
@@ -39,6 +38,10 @@ export const BookingProvider = ({
     restaurants: [],
     message: null,
     restaurantDetails: [],
+  });
+  const [selectedPromotion, setSelectedPromotion] = useState({
+    promotion: null,
+    leaveTime: null,
   });
 
   const updatePartySize = async (newSize) => {
@@ -116,6 +119,7 @@ export const BookingProvider = ({
         const phoneNumber = parsePhoneNumberFromString(value);
         return phoneNumber?.isValid();
       }),
+    drgPlusLoyaltyMemberID: Yup.string(),
     voucherCode: Yup.string(),
     comments: Yup.string(),
     receiveEmailMarketingsubscribe: Yup.boolean(),
@@ -130,6 +134,7 @@ export const BookingProvider = ({
       phone: "",
       mobileNumber: "",
       mobileCountryCode: "",
+      drgPlusLoyaltyMemberID: "",
       voucherCode: "",
       comments: "",
       receiveEmailMarketingsubscribe: false,
