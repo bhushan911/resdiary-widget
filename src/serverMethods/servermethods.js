@@ -198,12 +198,12 @@ const checkAvailability = async (
     console.log(matchingTimeSlot);
     if (matchingTimeSlot) {
       console.log(
-        "Success! Standard availability found for the selected date and time."
+        "Success! Availability found for the selected date and time."
       );
       availabilityResult.result = true;
       availabilityResult.matchingTimeSlot = matchingTimeSlot;
       availabilityResult.message =
-        "Success! Standard availability found for the selected date and time.";
+        "Success! Availability found for the selected date and time.";
       availabilityResult.promotions = response.Promotions;
       availabilityResult.standardAvailabilityMayRequireCreditCard =
         response.StandardAvailabilityMayRequireCreditCard;
