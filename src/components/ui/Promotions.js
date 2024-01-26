@@ -87,9 +87,12 @@ const Promotions = () => {
           <h2 className="text-lg font-bold mb-2 ">
             {promotion.Name}
 
-            <span className="inline-block pt-0 px-2  h-4  ">
-              <HiCreditCard />
-            </span>
+            {promotion.MayRequireCreditCard === true ||
+            promotion.MayRequireDeposit === true ? (
+              <span className="inline-block pt-0 px-2 h-4">
+                <HiCreditCard />
+              </span>
+            ) : null}
           </h2>
           <div className="">
             <p className="text-base">
@@ -113,16 +116,18 @@ const Promotions = () => {
           : "Leave time not required."}
       </p>
 
-      {selectedPromotion.promotion != null && (
-        <p className="text-gray-800 text-sm text-center ">
-          <span className="inline-block pt-1 h-4 w-4">
-            <HiCreditCard className="" />
-          </span>{" "}
-          A payment of{" "}
-          {`${newSetup.CurrencySymbol}${selectedPromotion.promotion.FullPrice}`}{" "}
-          will be required to secure this reservation.
-        </p>
-      )}
+      {selectedPromotion.promotion != null &&
+        (selectedPromotion.promotion.MayRequireCreditCard === true ||
+          selectedPromotion.promotion.MayRequireDeposit === true) && (
+          <p className="text-gray-800 text-sm text-center">
+            <span className="inline-block pt-1 h-4 w-4">
+              <HiCreditCard className="" />
+            </span>{" "}
+            A payment of{" "}
+            {`${newSetup.CurrencySymbol}${selectedPromotion.promotion.FullPrice}`}{" "}
+            will be required to secure this reservation.
+          </p>
+        )}
 
       <div className="flex justify-between items-center mt-8">
         <button
