@@ -172,6 +172,8 @@ const checkAvailability = async (
     restaurants: [],
     message: "Success",
     restaurantDetails: [],
+    promotions: [],
+    standardAvailabilityMayRequireCreditCard: false,
   };
   try {
     const response = await getAvailabilitySearch(
@@ -202,6 +204,10 @@ const checkAvailability = async (
       availabilityResult.matchingTimeSlot = matchingTimeSlot;
       availabilityResult.message =
         "Success! Standard availability found for the selected date and time.";
+      availabilityResult.promotions = response.Promotions;
+      availabilityResult.standardAvailabilityMayRequireCreditCard =
+        response.StandardAvailabilityMayRequireCreditCard;
+
       return availabilityResult;
     } else {
       console.log(
@@ -404,6 +410,8 @@ async function BookingWithStripeToken(bookingDetails) {
     mobileCountryCode,
     mobileNumber,
     email,
+    voucherCode,
+    drgPlusLoyaltyMemberID,
     receiveEmailMarketingsubscribe,
   } = bookingDetails;
 
@@ -437,6 +445,8 @@ async function BookingWithStripeToken(bookingDetails) {
           MobileCountryCode: mobileCountryCode,
           Mobile: mobileNumber,
           Email: email,
+          CustomField: voucherCode,
+          MembershipId: drgPlusLoyaltyMemberID,
           ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
           ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
         },
@@ -485,6 +495,8 @@ async function BookingWithStripeTokenwithSession(bookingDetails) {
     mobileCountryCode,
     mobileNumber,
     email,
+    voucherCode,
+    drgPlusLoyaltyMemberID,
     receiveEmailMarketingsubscribe,
     StripeCheckoutSessionId, // Added sessionId in the destructuring
   } = bookingDetails;
@@ -518,6 +530,8 @@ async function BookingWithStripeTokenwithSession(bookingDetails) {
           MobileCountryCode: mobileCountryCode,
           Mobile: mobileNumber,
           Email: email,
+          CustomField: voucherCode,
+          MembershipId: drgPlusLoyaltyMemberID,
           ReceiveResDiaryEmailMarketing: receiveEmailMarketingsubscribe,
           ReceiveEmailMarketing: receiveEmailMarketingsubscribe,
         },

@@ -16,6 +16,8 @@ function CheckAvailability() {
     selectedDate,
     selectedTime,
     setSelectedTime,
+    selectedPromotion,
+    setSelectedPromotion,
   } = useContext(BookingContext);
   const { nextStep } = useContext(NavigationContext);
 
@@ -23,6 +25,18 @@ function CheckAvailability() {
   // useEffect(() => {
   //   setIsNextEnabled(availability.result && selectedTime);
   // }, [availability.result, selectedTime]);
+
+  useEffect(() => {
+    // Update selectedPromotion.leaveTime when availability.matchingTimeSlot.LeaveTime changes
+    if (availability.matchingTimeSlot && selectedPromotion) {
+      setSelectedPromotion({
+        ...selectedPromotion,
+        leaveTime: availability.matchingTimeSlot.LeaveTime,
+      });
+    }
+    console.log(selectedPromotion.leaveTime);
+  }, [availability.matchingTimeSlot?.LeaveTime]);
+
   useEffect(() => {
     console.log(availability); // Check what availability is when the component renders
     setIsNextEnabled(availability?.result && selectedTime);
@@ -137,13 +151,13 @@ function CheckAvailability() {
                 <span className="text-gray-800 font:bold text-md text-center my-2">
                   Available Timeslots
                 </span>
-                <div className="flex flex-wrap gap-2 mt-2">
+                <div className="flex flex-wrap max-h-56 max-w-lg mx-auto gap-2 mt-2">
                   {restaurant.AvailableTimeSlots.map((timeSlot, timeIndex) => (
                     <button
                       key={timeIndex}
                       onClick={() => handleTimeSlotClick(timeSlot.TimeSlot)}
                       disabled={!isAccessibleRestaurant} // Enable only for the specific restaurant
-                      className={`px-2 py-1 w-24 mx-auto text-base rounded-md ${
+                      className={`px-2 py-1 m-auto w-24 justify-center text-base rounded-md ${
                         format(new Date(timeSlot.TimeSlot), "HH:mm:ss") ===
                         selectedTime
                           ? "bg-blue-500 text-white"
@@ -171,7 +185,7 @@ function CheckAvailability() {
         <div>
           <p className="text-gray-800 font:bold text-md text-center mb-2">
             {/* {availability?.message || "No availability data available."} */}
-            {availability.message}
+            {availability?.message}
           </p>
         </div>
       )}

@@ -107,6 +107,17 @@ const ContactForm = () => {
         <div className="mb-4">
           <input
             type="text"
+            name="drgPlusLoyaltyMemberID"
+            placeholder="DRG+ Loyalty Member ID  "
+            className="border rounded py-2 px-3 text-grey-darker w-full"
+            value={values.drgPlusLoyaltyMemberID}
+            onBlur={handleBlur}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
             name="voucherCode"
             placeholder="Voucher No (up to 8 voucher codes)"
             className="border rounded py-2 px-3 text-grey-darker w-full"

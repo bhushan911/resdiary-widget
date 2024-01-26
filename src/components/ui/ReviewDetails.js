@@ -23,6 +23,7 @@ const ReviewDetails = () => {
   const { nextStep, prevStep, variableStep } = useContext(NavigationContext);
   // const [stripePublishableKey, setStripePublishableKey] = useState(null);
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+  let leaveTimeRequired = availability.matchingTimeSlot.IsLeaveTimeRequired;
 
   const handleTermsChange = (event) => {
     setIsTermsAccepted(event.target.checked);
@@ -35,7 +36,7 @@ const ReviewDetails = () => {
       partySize,
       selectedDate: selectedDate.toISOString(),
       selectedTime,
-      selectedPromotionId: selectedPromotion?.Id,
+      selectedPromotionId: selectedPromotion?.promotion?.Id,
       leaveTimeConfirmed: availability.matchingTimeSlot.IsLeaveTimeRequired,
       ...values,
     };
@@ -166,17 +167,12 @@ const ReviewDetails = () => {
             <span className="basis-3/4   break-all">{values.email}</span>
           </div>
         </div>
-        <div className="mt-4">
-          {availability.matchingTimeSlot.IsLeaveTimeRequired == true ? (
-            <p className="text-gray-800 font-semibold text-md text-start">
-              Your table is required to be returned by{" "}
-              {availability.matchingTimeSlot.LeaveTime}
-            </p>
-          ) : (
-            <p className="text-gray-800 font-semibold text-md text-center">
-              Leave Time Not Required
-            </p>
-          )}
+        <div className="mt-6">
+          <p className="text-gray-800 font-semibold text-md text-center">
+            {leaveTimeRequired
+              ? `Your table is required to be returned by ${selectedPromotion.leaveTime}`
+              : "Leave time not required."}
+          </p>
         </div>
         <div className="mt-4 flex items-center">
           <input
